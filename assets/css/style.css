@@ -188,7 +188,7 @@ html {
   #REUSED STYLE
 \*-----------------------------------*/
 
-.container {
+.container, .container-home {
   margin-inline: auto;
   margin: auto; /* fallback for margin-inline */
   padding: 0 15px;
@@ -625,7 +625,7 @@ footer .wrapper { text-align: center; }
    * REUSED STYLE 
    */
 
-  .container { padding: 0 30px; }
+  .container, .container-home { padding: 0 30px; }
 
 
 
@@ -726,7 +726,7 @@ footer .wrapper { text-align: center; }
    * REUSED STYLE 
    */
 
-  .container { max-width: 800px; }
+  .container, .container-home { max-width: 800px; }
 
 }
 
@@ -757,7 +757,7 @@ footer .wrapper { text-align: center; }
    * REUSED STYLE 
    */
 
-  .container { max-width: 1150px; }
+  .container, .container-home { max-width: 1150px; }
 
 
 
@@ -901,12 +901,17 @@ footer .wrapper { text-align: center; }
    * MAIN 
    */
 
-  .main .container {
+  .main .container-home {
     display: grid;
     grid-template-columns: 5fr 2fr;
     gap: 60px;
   }
 
+  .main .container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
 
 
   /**

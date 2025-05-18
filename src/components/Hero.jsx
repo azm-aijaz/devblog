@@ -22,7 +22,7 @@ function Hero() {
         <div className="right">
           <div className="pattern-bg"></div>
           <div className="img-box">
-            <img src="/assets/images/hero.png" alt="Julia Walker" className="hero-img" />
+            <img src="/assets/images/blog-10.png" alt="Julia Walker" className="hero-img" />
             <div className="shape shape-1"></div>
             <div className="shape shape-2"></div>
           </div>

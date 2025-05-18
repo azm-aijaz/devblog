@@ -27,7 +27,7 @@ function CreateBlog() {
   };
 
   return (
-    <div className="main">
+    <div className="main-content">
       <div className="container">
         <div className="blog-create">
           <h1 className="h2">Create New Blog Post</h1>
