@@ -15,7 +15,6 @@ function App() {
   const toggleTheme = () => {
     setTheme(theme === 'light-theme' ? 'dark-theme' : 'light-theme');
   };
-
   return (
     <Router>
       <div className={theme}>
