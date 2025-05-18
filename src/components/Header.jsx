@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { IoMenuOutline, IoCloseOutline, IoMoon, IoSunny, IoServerOutline, IoAccessibilityOutline, IoRocketOutline } from 'react-icons/io5';
 
 function Header({ theme, toggleTheme }) {
@@ -12,10 +13,10 @@ function Header({ theme, toggleTheme }) {
     <header>
       <div className="container">
         <nav className="navbar">
-          <a href="#">
+          <Link to="/">
             <img src="/assets/images/logo-light.svg" alt="Devblog's logo" width="150" height="40" className="logo-light" />
             <img src="/assets/images/logo-dark.svg" alt="Devblog's logo" width="150" height="40" className="logo-dark" />
-          </a>
+          </Link>
 
           <div className="btn-group">
             <button className={`theme-btn theme-btn-mobile ${theme === 'light-theme' ? 'light' : 'dark'}`} onClick={toggleTheme}>
@@ -31,13 +32,16 @@ function Header({ theme, toggleTheme }) {
           <div className="flex-wrapper">
             <ul className="desktop-nav">
               <li>
-                <a href="#" className="nav-link">Home</a>
+                <Link to="/" className="nav-link">Home</Link>
               </li>
               <li>
-                <a href="#" className="nav-link">About Me</a>
+                <Link to="/create" className="nav-link">Create Post</Link>
               </li>
               <li>
-                <a href="#" className="nav-link">Contact</a>
+                <Link to="#" className="nav-link">About Me</Link>
+              </li>
+              <li>
+                <Link to="#" className="nav-link">Contact</Link>
               </li>
             </ul>
 
@@ -56,13 +60,16 @@ function Header({ theme, toggleTheme }) {
               <p className="h3 nav-title">Main Menu</p>
               <ul>
                 <li className="nav-item">
-                  <a href="#" className="nav-link">Home</a>
+                  <Link to="/" className="nav-link" onClick={toggleNav}>Home</Link>
                 </li>
                 <li className="nav-item">
-                  <a href="#" className="nav-link">About Me</a>
+                  <Link to="/create" className="nav-link" onClick={toggleNav}>Create Post</Link>
                 </li>
                 <li className="nav-item">
-                  <a href="#" className="nav-link">Contact</a>
+                  <Link to="#" className="nav-link" onClick={toggleNav}>About Me</Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="#" className="nav-link" onClick={toggleNav}>Contact</Link>
                 </li>
               </ul>
             </div>
@@ -71,13 +78,13 @@ function Header({ theme, toggleTheme }) {
               <p className="h3 nav-title">Topics</p>
               <ul>
                 <li className="nav-item">
-                  <a href="#" className="nav-link">Database</a>
+                  <Link to="#" className="nav-link" onClick={toggleNav}>Database</Link>
                 </li>
                 <li className="nav-item">
-                  <a href="#" className="nav-link">Accessibility</a>
+                  <Link to="#" className="nav-link" onClick={toggleNav}>Accessibility</Link>
                 </li>
                 <li className="nav-item">
-                  <a href="#" className="nav-link">Web Performance</a>
+                  <Link to="#" className="nav-link" onClick={toggleNav}>Web Performance</Link>
                 </li>
               </ul>
             </div>
