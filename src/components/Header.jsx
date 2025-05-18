@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { IoMenuOutline, IoCloseOutline, IoMoon, IoSunny, IoServerOutline, IoAccessibilityOutline, IoRocketOutline } from 'react-icons/io5';
+import { IoMenuOutline, IoCloseOutline, IoMoon, IoSunny } from 'react-icons/io5';
 
 function Header({ theme, toggleTheme }) {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -14,8 +14,8 @@ function Header({ theme, toggleTheme }) {
       <div className="container">
         <nav className="navbar">
           <Link to="/">
-            <img src="/assets/images/logo-light.svg" alt="Devblog's logo" width="150" height="40" className="logo-light" />
-            <img src="/assets/images/logo-dark.svg" alt="Devblog's logo" width="150" height="40" className="logo-dark" />
+            <img src="/images/logo-light.svg" alt="logo" width="150" height="40" className="logo-light" />
+            <img src="/images/logo-dark.svg" alt="logo" width="150" height="40" className="logo-dark" />
           </Link>
 
           <div className="btn-group">
@@ -35,7 +35,7 @@ function Header({ theme, toggleTheme }) {
                 <Link to="/" className="nav-link">Home</Link>
               </li>
               <li>
-                <Link to="/create" className="nav-link">Create Post</Link>
+                <Link to="/create" className="nav-link">Write</Link>
               </li>
               <li>
                 <Link to="#" className="nav-link">About Me</Link>

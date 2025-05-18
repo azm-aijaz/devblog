@@ -1,12 +1,13 @@
 {
-  "name": "react-blog",
+  "name": "byteblog",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "firebase deploy --only hosting:byteblog"
   },
   "dependencies": {
     "react": "^18.2.0",

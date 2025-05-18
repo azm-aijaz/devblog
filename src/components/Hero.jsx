@@ -4,14 +4,11 @@ function Hero() {
       <div className="container">
         <div className="left">
           <h1 className="h1">
-            Hi, I'm <b>Julia&nbsp;Walker</b>.
-            <br />Web Developer
+            Welcome to <b>ByteBlog</b>
           </h1>
 
           <p className="h3">
-            Specialized in <abbr title="Accessibility">a11y</abbr>
-            and Core Web Vitals
-          </p>
+            Join us to explore, engage with, and create your own tech bytes — your place to read and share.</p>
 
           <div className="btn-group">
             <a href="#" className="btn btn-primary">Contact Me</a>
@@ -22,7 +19,7 @@ function Hero() {
         <div className="right">
           <div className="pattern-bg"></div>
           <div className="img-box">
-            <img src="/assets/images/blog-10.png" alt="Julia Walker" className="hero-img" />
+            <img src="/images/blog-10.png" alt="Julia Walker" className="hero-img" />
             <div className="shape shape-1"></div>
             <div className="shape shape-2"></div>
           </div>

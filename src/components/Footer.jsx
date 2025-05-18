@@ -4,8 +4,8 @@ function Footer() {
       <div className="container">
         <div className="wrapper">
           <a href="#" className="footer-logo">
-            <img src="/assets/images/logo-light.svg" alt="DevBlog's Logo" width="150" height="40" className="logo-light" />
-            <img src="/assets/images/logo-dark.svg" alt="DevBlog's Logo" width="150" height="40" className="logo-dark" />
+            <img src="/images/logo-light.svg" alt="DevBlog's Logo" width="150" height="40" className="logo-light" />
+            <img src="/images/logo-dark.svg" alt="DevBlog's Logo" width="150" height="40" className="logo-dark" />
           </a>
           <p className="footer-text">
             Learn about Web accessibility, Web performance, and Database management.

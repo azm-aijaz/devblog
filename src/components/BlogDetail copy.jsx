@@ -73,7 +73,7 @@ function BlogDetail() {
             <div className="blog-meta">
               <div className="blog-info">
                 <div className="profile-wrapper">
-                  <img src="/assets/images/author.png" alt="Julia Walker" />
+                  <img src="/images/author.png" alt="Julia Walker" />
                 </div>
                 <div className="wrapper">
                   <a href="#" className="author-name">Julia Walker</a>
@@ -105,7 +105,7 @@ function BlogDetail() {
           </div>
 
           <img
-            src="/assets/images/blog-1.png"
+            src="/images/blog-1.png"
             alt="Building microservices with Dropwizard, MongoDB & Docker"
             className="blog-detail-banner"
           />
