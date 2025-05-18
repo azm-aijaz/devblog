@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { IoTimeOutline, IoEyeOutline, IoHeartOutline, IoHeart, IoBookmarkOutline, IoBookmark } from 'react-icons/io5';
+import { IoTimeOutline, IoEyeOutline, IoHeartOutline, IoHeart, IoBookmarkOutline, IoBookmark, IoShareSocialOutline } from 'react-icons/io5';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 function BlogDetail() {
   const { id } = useParams();
@@ -8,10 +10,35 @@ function BlogDetail() {
   const [views, setViews] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [content, setContent] = useState('');
 
-  // Simulate view count increment on page load
+  const modules = {
+    toolbar: [
+      [{ 'header': [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['link', 'image', 'code-block'],
+      ['clean']
+    ],
+  };
+
   useEffect(() => {
     setViews(prev => prev + 1);
+    // Initialize with some content
+    setContent(`
+      <h2>What is MongoDB?</h2>
+      <p>MongoDB is a document database with the scalability and flexibility that you want with the querying
+      and indexing that you need. Here are some of the key features of MongoDB.</p>
+      
+      <h3>Key Features:</h3>
+      <ul>
+        <li>Document Oriented Storage</li>
+        <li>High Performance</li>
+        <li>High Availability</li>
+        <li>Easy Scalability</li>
+        <li>Rich Query Language</li>
+      </ul>
+    `);
   }, []);
 
   const handleLike = () => {
@@ -25,6 +52,15 @@ function BlogDetail() {
 
   const handleSave = () => {
     setIsSaved(!isSaved);
+  };
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Building microservices with Dropwizard, MongoDB & Docker',
+        url: window.location.href
+      });
+    }
   };
 
   return (
@@ -58,6 +94,9 @@ function BlogDetail() {
                 <button className={`stat-btn ${isSaved ? 'active' : ''}`} onClick={handleSave}>
                   {isSaved ? <IoBookmark /> : <IoBookmarkOutline />}
                 </button>
+                <button className="stat-btn" onClick={handleShare}>
+                  <IoShareSocialOutline />
+                </button>
               </div>
             </div>
           </div>
@@ -69,28 +108,13 @@ function BlogDetail() {
           />
 
           <div className="blog-detail-content">
-            <p>
-              This NoSQL database oriented to documents (by documents like JSON) combines some of the features from
-              relational databases, easy to use and the multi-platform is the best option for scale up and have fault
-              tolerance, load balancing, map reduce, etc.
-            </p>
-
-            <h2 className="h2">What is MongoDB?</h2>
-            <p>
-              MongoDB is a document database with the scalability and flexibility that you want with the querying
-              and indexing that you need. Here are some of the key features of MongoDB.
-            </p>
-
-            <h3 className="h3">Key Features:</h3>
-            <ul>
-              <li>Document Oriented Storage</li>
-              <li>High Performance</li>
-              <li>High Availability</li>
-              <li>Easy Scalability</li>
-              <li>Rich Query Language</li>
-            </ul>
-
-            {/* Add more content as needed */}
+            <ReactQuill 
+              value={content} 
+              onChange={setContent}
+              modules={modules}
+              readOnly={true}
+              theme="snow"
+            />
           </div>
         </article>
       </div>
