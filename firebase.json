@@ -1,8 +1,6 @@
 {
   "hosting": {
-    "site": "byteblog",
     "public": "dist",
-    "cleanUrls": true,
     "ignore": [
       "firebase.json",
       "**/.*",
