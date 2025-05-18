@@ -12,17 +12,62 @@ function Blog() {
       date: '2022-01-17',
       readTime: '3 min'
     },
+    {
+      id: 2,
+      image: '/images/blog-2.png',
+      title: 'Building microservices with Dropwizard, MongoDB & Docker',
+      topic: 'Database',
+      text: 'This NoSQL database oriented to documents (by documents like JSON) combines some of the features from relational databases, easy to use and the multi-platform is the best option for scale up and have fault tolerance, load balancing, map reduce, etc.',
+      date: '2022-01-17',
+      readTime: '3 min'
+    },
+    {
+      id: 3,
+      image: '/images/blog-3.png',
+      title: 'Building microservices with Dropwizard, MongoDB & Docker',
+      topic: 'Database',
+      text: 'This NoSQL database oriented to documents (by documents like JSON) combines some of the features from relational databases, easy to use and the multi-platform is the best option for scale up and have fault tolerance, load balancing, map reduce, etc.',
+      date: '2022-01-17',
+      readTime: '3 min'
+    },
+    {
+      id: 4,
+      image: '/images/blog-4.png',
+      title: 'Building microservices with Dropwizard, MongoDB & Docker',
+      topic: 'Database',
+      text: 'This NoSQL database oriented to documents (by documents like JSON) combines some of the features from relational databases, easy to use and the multi-platform is the best option for scale up and have fault tolerance, load balancing, map reduce, etc.',
+      date: '2022-01-17',
+      readTime: '3 min'
+    },
+    {
+      id: 5,
+      image: '/images/blog-5.png',
+      title: 'Building microservices with Dropwizard, MongoDB & Docker',
+      topic: 'Database',
+      text: 'This NoSQL database oriented to documents (by documents like JSON) combines some of the features from relational databases, easy to use and the multi-platform is the best option for scale up and have fault tolerance, load balancing, map reduce, etc.',
+      date: '2022-01-17',
+      readTime: '3 min'
+    },
+    {
+      id: 6,
+      image: '/images/blog-6.png',
+      title: 'Building microservices with Dropwizard, MongoDB & Docker',
+      topic: 'Database',
+      text: 'This NoSQL database oriented to documents (by documents like JSON) combines some of the features from relational databases, easy to use and the multi-platform is the best option for scale up and have fault tolerance, load balancing, map reduce, etc.',
+      date: '2022-01-17',
+      readTime: '3 min'
+    },
     // Add more blog posts here
   ];
 
   return (
     <div className="blog">
-      <h2 className="h2">Latest ByteBlog Post</h2>
+      <h2 className="h2">Latest Blog Post</h2>
       <div className="blog-card-group">
         {blogPosts.map(post => (
           <div key={post.id} className="blog-card">
             <div className="blog-card-banner">
-              <img src={post.image} alt={post.title} width="250" className="blog-banner-img" />
+              <img src={post.image} alt={post.title} className="blog-banner-img" />
             </div>
 
             <div className="blog-content-wrapper">
@@ -35,10 +80,11 @@ function Blog() {
               <div className="wrapper-flex">
                 <div className="profile-wrapper">
                   <img src="/images/author.png" alt="Julia Walker" width="50" />
+                  <a href="#" class="h4 mob-author">Julia Walker</a>
                 </div>
 
                 <div className="wrapper">
-                  <a href="#" className="h4">Julia Walker</a>
+                  <a href="#" className="h4 desk-author">Julia Walker</a>
                   <p className="text-sm">
                     <time dateTime={post.date}>
                       {new Date(post.date).toLocaleDateString('en-US', {
