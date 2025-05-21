@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { IoMenuOutline, IoCloseOutline, IoMoon, IoSunny } from 'react-icons/io5';
+import { IoMenuOutline, IoCloseOutline, IoMoon, IoSunny, IoSearchOutline } from 'react-icons/io5';
 
 function Header({ theme, toggleTheme }) {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -19,6 +19,9 @@ function Header({ theme, toggleTheme }) {
           </Link>
 
           <div className="btn-group">
+            <Link to="/search" className="theme-btn-mobile">
+              <IoSearchOutline />
+            </Link>
             <button className={`theme-btn theme-btn-mobile ${theme === 'light-theme' ? 'light' : 'dark'}`} onClick={toggleTheme}>
               <IoMoon className="moon" />
               <IoSunny className="sun" />
@@ -36,6 +39,9 @@ function Header({ theme, toggleTheme }) {
               </li>
               <li>
                 <Link to="/create" className="nav-link">Write</Link>
+              </li>
+              <li>
+                <Link to="/search" className="nav-link">Search</Link>
               </li>
               <li>
                 <Link to="#" className="nav-link">About Me</Link>
@@ -64,6 +70,9 @@ function Header({ theme, toggleTheme }) {
                 </li>
                 <li className="nav-item">
                   <Link to="/create" className="nav-link" onClick={toggleNav}>Create Post</Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/search" className="nav-link" onClick={toggleNav}>Search</Link>
                 </li>
                 <li className="nav-item">
                   <Link to="#" className="nav-link" onClick={toggleNav}>About Me</Link>
