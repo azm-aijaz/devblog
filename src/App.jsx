@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Homepage from './components/Homepage';
 import BlogDetail from './components/BlogDetail';
 import CreateBlog from './components/CreateBlog';
+import SearchPage from './components/SearchPage';
 import Footer from './components/Footer';
 import './App.css';
 
@@ -13,6 +14,7 @@ function App() {
   const toggleTheme = () => {
     setTheme(theme === 'light-theme' ? 'dark-theme' : 'light-theme');
   };
+
   return (
     <Router>
       <div className={theme}>
@@ -22,6 +24,7 @@ function App() {
             <Route path="/" element={<Homepage />} />
             <Route path="/blog/:id" element={<BlogDetail />} />
             <Route path="/create" element={<CreateBlog />} />
+            <Route path="/search" element={<SearchPage />} />
           </Routes>
         </main>
         <Footer />
