@@ -14,8 +14,8 @@ function Header({ theme, toggleTheme }) {
       <div className="container">
         <nav className="navbar">
           <Link to="/">
-            <img src="/images/logo-light.svg" alt="logo" width="150" height="40" className="logo-light" />
-            <img src="/images/logo-dark.svg" alt="logo" width="150" height="40" className="logo-dark" />
+            <img src="/images/logo-light.svg" alt="logo" width="170" height="40" className="logo-light" />
+            <img src="/images/logo-dark.svg" alt="logo" width="170" height="40" className="logo-dark" />
           </Link>
 
           <div className="btn-group">

@@ -3,12 +3,13 @@
 
 /* Blog Detail Styles */
 .blog-detail {
-  background: var(--background-primary);
+  /* background: var(--background-primary); */
   padding: 2rem;
   border-radius: 10px;
-  margin: 2rem auto;
+  /* margin: 2rem auto; */
+  margin: 0 auto;
   max-width: 900px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
 }
 
 .blog-detail-header {
@@ -166,9 +167,15 @@
 
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
+
+  .main > .container {
+    width: 100%;
+    padding: 0;
+  }
+
   .blog-detail {
-    padding: 1.5rem;
-    margin: 1rem;
+    padding: 1.2rem;
+    margin: 0rem;
   }
 
   .blog-detail-header .h1 {
