@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { IoTimeOutline, IoEyeOutline, IoHeartOutline, IoHeart, IoBookmarkOutline, IoBookmark, IoShareSocialOutline } from 'react-icons/io5';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 
 function BlogDetail() {
   const { id } = useParams();
@@ -10,36 +8,45 @@ function BlogDetail() {
   const [views, setViews] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
-  const [content, setContent] = useState('');
-
-  const modules = {
-    toolbar: [
-      [{ 'header': [1, 2, 3, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-      ['link', 'image', 'code-block'],
-      ['clean']
-    ],
-  };
-
-  useEffect(() => {
-    setViews(prev => prev + 1);
-    // Initialize with some content
-    setContent(`
+  const [blog, setBlog] = useState({
+    title: 'Building microservices with Dropwizard, MongoDB & Docker',
+    author: 'Julia Walker',
+    date: '2022-01-17',
+    readTime: '3 min',
+    content: `
       <h2>What is MongoDB?</h2>
       <p>MongoDB is a document database with the scalability and flexibility that you want with the querying
       and indexing that you need. Here are some of the key features of MongoDB.</p>
       
       <h3>Key Features:</h3>
       <ul>
-        <li>Document Oriented Storage</li>
-        <li>High Performance</li>
-        <li>High Availability</li>
-        <li>Easy Scalability</li>
-        <li>Rich Query Language</li>
+        <li>Document Oriented Storage - JSON-like documents with dynamic schemas offer simplicity and power.</li>
+        <li>High Performance - MongoDB provides high performance data persistence.</li>
+        <li>High Availability - Replica sets ensure high availability.</li>
+        <li>Easy Scalability - MongoDB scales horizontally using sharding.</li>
+        <li>Rich Query Language - MongoDB supports rich queries.</li>
       </ul>
-    `);
-  }, []);
+
+      <h2>Why use MongoDB?</h2>
+      <p>MongoDB is built on a scale-out architecture that has become popular with developers of all kinds for developing scalable applications with evolving data schemas.</p>
+      
+      <p>As a document database, MongoDB makes it easy for developers to store structured or unstructured data. It uses a JSON-like format to store documents. This format directly maps to native objects in most modern programming languages, making it a natural choice for developers.</p>
+      
+      <h3>MongoDB and Microservices</h3>
+      <p>MongoDB is a great fit for microservices architecture because:</p>
+      <ul>
+        <li>Each microservice can have its own data model</li>
+        <li>Independent scaling of services</li>
+        <li>Better performance through data locality</li>
+        <li>Simplified deployment and operations</li>
+      </ul>
+    `
+  });
+
+  useEffect(() => {
+    setViews(prev => prev + 1);
+    // Here you would typically fetch the blog data using the id
+  }, [id]);
 
   const handleLike = () => {
     if (isLiked) {
@@ -57,7 +64,7 @@ function BlogDetail() {
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: 'Building microservices with Dropwizard, MongoDB & Docker',
+        title: blog.title,
         url: window.location.href
       });
     }
@@ -68,20 +75,26 @@ function BlogDetail() {
       <div className="container">
         <article className="blog-detail">
           <div className="blog-detail-header">
-            <h1 className="h1">Building microservices with Dropwizard, MongoDB & Docker</h1>
+            <h1 className="h1">{blog.title}</h1>
 
             <div className="blog-meta">
               <div className="blog-info">
                 <div className="profile-wrapper">
-                  <img src="/images/author.png" alt="Julia Walker" />
+                  <img src="/images/author.png" alt={blog.author} />
                 </div>
                 <div className="wrapper">
-                  <a href="#" className="author-name">Julia Walker</a>
+                  <a href="#" className="author-name">{blog.author}</a>
                   <p className="meta">
-                    <time dateTime="2022-01-17">Jan 17, 2022</time>
+                    <time dateTime={blog.date}>
+                      {new Date(blog.date).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      })}
+                    </time>
                     <span className="dot">·</span>
                     <IoTimeOutline size={14} />
-                    <time dateTime="PT3M">3 min read</time>
+                    <time dateTime={`PT${blog.readTime.split(' ')[0]}M`}>{blog.readTime}</time>
                   </p>
                 </div>
               </div>
@@ -101,24 +114,18 @@ function BlogDetail() {
                 </button>
               </div>
             </div>
-
           </div>
 
           <img
             src="/images/blog-1.png"
-            alt="Building microservices with Dropwizard, MongoDB & Docker"
+            alt={blog.title}
             className="blog-detail-banner"
           />
 
-          <div className="blog-detail-content">
-            <ReactQuill
-              value={content}
-              onChange={setContent}
-              modules={modules}
-              readOnly={false}
-              theme="snow"
-            />
-          </div>
+          <div 
+            className="blog-detail-content"
+            dangerouslySetInnerHTML={{ __html: blog.content }}
+          />
         </article>
       </div>
     </div>
