@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { IoMenuOutline, IoCloseOutline, IoMoon, IoSunny, IoSearchOutline } from 'react-icons/io5';
+import { useAuth } from '../lib/AuthContext';
 
-function Header({ theme, toggleTheme }) {
+function Header({ theme, toggleTheme, user }) {
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const { signInWithGoogle, signOut } = useAuth();
 
   const toggleNav = () => {
     setIsNavOpen(!isNavOpen);
@@ -14,8 +16,8 @@ function Header({ theme, toggleTheme }) {
       <div className="container">
         <nav className="navbar">
           <Link to="/">
-            <img src="/images/logo-light.svg" alt="logo" width="170" height="40" className="logo-light" />
-            <img src="/images/logo-dark.svg" alt="logo" width="170" height="40" className="logo-dark" />
+            <img src="/images/logo-light.png" alt="logo" width="170" height="40" className="logo-light" />
+            <img src="/images/logo-dark.png" alt="logo" width="170" height="40" className="logo-dark" />
           </Link>
 
           <div className="btn-group">
@@ -37,9 +39,11 @@ function Header({ theme, toggleTheme }) {
               <li>
                 <Link to="/" className="nav-link">Home</Link>
               </li>
-              <li>
-                <Link to="/create" className="nav-link">Write</Link>
-              </li>
+              {user && (
+                <li>
+                  <Link to="/write" className="nav-link">Write</Link>
+                </li>
+              )}
               <li>
                 <Link to="/search" className="nav-link">Search</Link>
               </li>
@@ -48,6 +52,13 @@ function Header({ theme, toggleTheme }) {
               </li>
               <li>
                 <Link to="#" className="nav-link">Contact</Link>
+              </li>
+              <li>
+                {user ? (
+                  <button onClick={signOut} className="nav-link">Sign Out</button>
+                ) : (
+                  <button onClick={signInWithGoogle} className="nav-link">Sign In</button>
+                )}
               </li>
             </ul>
 
@@ -68,9 +79,11 @@ function Header({ theme, toggleTheme }) {
                 <li className="nav-item">
                   <Link to="/" className="nav-link" onClick={toggleNav}>Home</Link>
                 </li>
-                <li className="nav-item">
-                  <Link to="/create" className="nav-link" onClick={toggleNav}>Create Post</Link>
-                </li>
+                {user && (
+                  <li className="nav-item">
+                    <Link to="/write" className="nav-link" onClick={toggleNav}>Create Post</Link>
+                  </li>
+                )}
                 <li className="nav-item">
                   <Link to="/search" className="nav-link" onClick={toggleNav}>Search</Link>
                 </li>
@@ -79,6 +92,13 @@ function Header({ theme, toggleTheme }) {
                 </li>
                 <li className="nav-item">
                   <Link to="#" className="nav-link" onClick={toggleNav}>Contact</Link>
+                </li>
+                <li className="nav-item">
+                  {user ? (
+                    <button onClick={() => { signOut(); toggleNav(); }} className="nav-link">Sign Out</button>
+                  ) : (
+                    <button onClick={() => { signInWithGoogle(); toggleNav(); }} className="nav-link">Sign In</button>
+                  )}
                 </li>
               </ul>
             </div>

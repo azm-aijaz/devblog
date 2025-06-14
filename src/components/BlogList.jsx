@@ -80,7 +80,7 @@ function Blog() {
               <div className="wrapper-flex">
                 <div className="profile-wrapper">
                   <img src="/images/author.png" alt="Julia Walker" width="50" />
-                  <a href="#" class="h4 mob-author">Julia Walker</a>
+                  <a href="#" className="h4 mob-author">Julia Walker</a>
                 </div>
 
                 <div className="wrapper">

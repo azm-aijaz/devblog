@@ -4,8 +4,8 @@ function Footer() {
       <div className="container">
         <div className="wrapper">
           <a href="#" className="footer-logo">
-            <img src="/images/logo-light.svg" alt="DevBlog's Logo" width="150" height="40" className="logo-light" />
-            <img src="/images/logo-dark.svg" alt="DevBlog's Logo" width="150" height="40" className="logo-dark" />
+            <img src="/images/logo-light.png" alt="ByteBlog-logo" width="170" height="40" className="logo-light" />
+            <img src="/images/logo-dark.png" alt="ByteBlog-logo" width="170" height="40" className="logo-dark" />
           </a>
           <p className="footer-text">
             Learn about Web accessibility, Web performance, and Database management.
@@ -32,7 +32,7 @@ function Footer() {
       </div>
 
       <p className="copyright">
-        &copy; Copyright 2022 <a href="#">codewithsadee</a>
+        &copy; Copyright 2025 <a href="#">codewithsadee</a>
       </p>
     </footer>
   );
