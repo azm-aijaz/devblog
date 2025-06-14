@@ -12,6 +12,7 @@ import {
 } from 'react-icons/io5';
 import { supabase } from '../utils/supabase';
 import './BlogDetail.css';
+import LoadingSpinner from './LoadingSpinner';
 
 function BlogDetail() {
   const { slug } = useParams();
@@ -170,33 +171,7 @@ function BlogDetail() {
   };
 
   if (loading) {
-    return (
-      <div className="blog-detail loading">
-        <div className="blog-detail-header">
-          <div className="h1 shimmer"></div>
-          <div className="blog-meta">
-            <div className="blog-info">
-              <div className="profile-wrapper shimmer"></div>
-              <div className="wrapper">
-                <div className="author-name shimmer"></div>
-                <div className="meta shimmer"></div>
-              </div>
-            </div>
-            <div className="blog-stats">
-              <div className="stat-btn shimmer"></div>
-              <div className="stat-btn shimmer"></div>
-            </div>
-          </div>
-        </div>
-        <div className="blog-detail-banner shimmer"></div>
-        <div className="blog-detail-content">
-          <p className="shimmer"></p>
-          <p className="shimmer"></p>
-          <p className="shimmer"></p>
-          <p className="shimmer"></p>
-        </div>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   if (error) {

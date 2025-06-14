@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './lib/AuthContext';
 import Header from './components/Header';
@@ -28,11 +28,18 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function App() {
-  const [theme, setTheme] = useState('light-theme');
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('theme') || 'light-theme';
+  });
   const { user } = useAuth();
 
+  // Update localStorage when theme changes
+  useEffect(() => {
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
   const toggleTheme = () => {
-    setTheme(theme === 'light-theme' ? 'dark-theme' : 'light-theme');
+    setTheme(prevTheme => prevTheme === 'light-theme' ? 'dark-theme' : 'light-theme');
   };
 
   return (
