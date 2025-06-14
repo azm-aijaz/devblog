@@ -1,10 +1,8 @@
 import { useRef, useEffect } from 'react';
 import './QuillEditor.css';
 
-// Create a unique ID for the editor instance
-const EDITOR_ID = 'quill-editor'
 
-function QuillEditor({ value, onChange }) {
+function QuillEditor({ value='', editorId = 'quill-editor' }) {
   const quillRef = useRef(null);
   const editorInitialized = useRef(false);
 
@@ -18,21 +16,28 @@ function QuillEditor({ value, onChange }) {
       }, true);
 
       const toolbarOptions = [
-        ['bold', 'italic', 'underline', 'strike'],
-        ['blockquote', 'code-block'],
-        ['link', 'image', 'video', 'formula'],
-        [{ 'header': 1 }, { 'header': 2 }],
-        [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
-        [{ 'script': 'sub'}, { 'script': 'super' }],
-        [{ 'indent': '-1'}, { 'indent': '+1' }],
-        [{ 'direction': 'rtl' }],
-        [{ 'size': ['small', false, 'large', 'huge'] }],
         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'color': [] }, { 'background': [] }],
-        [{ 'font': [] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+        ['blockquote', 'code-block'],
+        ['link', 'image'],
         [{ 'align': [] }],
+        [{ 'color': [] }, { 'background': [] }],
+        [{ 'script': 'sub'}, { 'script': 'super' }],
+        ['formula'],
+
+        // [{ 'script': 'sub'}, { 'script': 'super' }],
+        // [{ 'indent': '-1'}, { 'indent': '+1' }],
+        // [{ 'direction': 'rtl' }],
+        // [{ 'size': ['small', false, 'large', 'huge'] }],
+        // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        // [{ 'color': [] }, { 'background': [] }],
+        // [{ 'font': [] }],
+        // [{ 'align': [] }],
+        // ['clean'],
+        ['table-better'],
         ['clean'],
-        ['table-better']
+
       ];
 
       const options = {
@@ -50,23 +55,13 @@ function QuillEditor({ value, onChange }) {
         }
       };
 
-      const editor = new window.Quill(`#${EDITOR_ID}`, options);
+      const editor = new window.Quill(`#${editorId}`, options);
       quillRef.current = editor;
 
       // Set initial content if provided
       if (value) {
         editor.root.innerHTML = value;
       }
-
-     // 🔥 Only update on focus out
-     editor.root.addEventListener('blur', () => {
-      if (onChange) {
-        console.log('blur editor.root.innerHTML', editor.root.innerHTML)
-        onChange(editor.root.innerHTML);
-      }
-    });
-
-
     }
 
     // Cleanup function
@@ -75,11 +70,11 @@ function QuillEditor({ value, onChange }) {
         quillRef.current = null;
       }
     };
-  }, [value, onChange]);
+  }, [value]);
 
   return (
     <div className="quill-editor-container">
-      <div id={EDITOR_ID} className="quill-editor"></div>
+      <div id={editorId} className="quill-editor"></div>
     </div>
   );
 }

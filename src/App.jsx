@@ -49,7 +49,7 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<Homepage />} />
-            <Route path="/posts/:slug" element={<BlogDetail />} />
+            <Route path="/blog/:slug" element={<BlogDetail />} />
             <Route path="/login" element={<Login />} />
             <Route path="/auth/callback" element={<AuthCallback />} />
             <Route 

@@ -34,7 +34,6 @@ function BlogDetail() {
 
       try {
         setLoading(true);
-        console.log('Fetching blog with slug:', slug);
         
         // First, fetch the blog post
         const { data: post, error: postError } = await supabase

@@ -19,12 +19,12 @@ const initialTopics = [
 
 function CreateBlog() {
   const navigate = useNavigate();
+  const editorId = 'byteblog-quill-editor'
   const fileInputRef = useRef(null);
   const { user } = useAuth();
   const [formData, setFormData] = useState({
     title: '',
     topic: initialTopics[0],
-    content: '',
     imageUrl: '',
     tags: [],
     published: false
@@ -51,49 +51,79 @@ function CreateBlog() {
     
     setAvailableTags(data);
   };
-
+  function generateHexId(length = 12) {
+    const byteLength = Math.ceil(length / 2);
+    const array = new Uint8Array(byteLength);
+    window.crypto.getRandomValues(array);
+    return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('').slice(0, length);
+  }
+  
   const calculateReadTime = (content) => {
     const wordsPerMinute = 200;
     const wordCount = content.replace(/<[^>]*>/g, '').split(/\s+/).length;
     return Math.ceil(wordCount / wordsPerMinute);
   };
-
+  
   const generateSlug = (title) => {
-    return title
+    // Generate base slug from title
+    const baseSlug = title
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '');
+
+    // Combine base slug with random suffix
+    return `${baseSlug}-${generateHexId()}`;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-
-    console.log('formData', formData)
-return
     try {
-      // First, upload the image if one is selected
+      // Get the content from the editor
+      const editor = document.querySelector(`#${editorId} > .ql-editor`)
+      const content = editor.innerHTML || ''
+      if (!content) {
+        console.error('No content from editor');
+        return;
+      }
+
+      // Upload image if selected
       let finalImageUrl = '';
       if (selectedImage) {
         finalImageUrl = await uploadImage(selectedImage);
       }
 
-      // Then, ensure the topic exists
-      const { data: topicData, error: topicError } = await supabase
+      // Check if topic exists
+      const { data: existingTopic, error: topicCheckError } = await supabase
         .from('topics')
-        .upsert({
-          name: formData.topic.name,
-          slug: generateSlug(formData.topic.name),
-          icon: formData.topic.icon
-        })
-        .select()
+        .select('*')
+        .eq('name', formData.topic.name)
         .single();
 
-      if (topicError) throw topicError;
+      if (topicCheckError && topicCheckError.code !== 'PGRST116') {
+        throw topicCheckError;
+      }
 
+      let topicId;
+      if (existingTopic) {
+        topicId = existingTopic.id;
+      } else {
+        const { data: newTopic, error: topicError } = await supabase
+          .from('topics')
+          .insert({
+            name: formData.topic.name,
+            slug: generateSlug(formData.topic.name),
+            icon: formData.topic.icon
+          })
+          .select()
+          .single();
+
+        if (topicError) throw topicError;
+        topicId = newTopic.id;
+      }
       // Generate excerpt from content
-      const excerpt = formData.content
+      const excerpt = content
         .replace(/<[^>]*>/g, '') // Remove HTML tags
         .substring(0, 200) // Get first 200 characters
         .trim() + '...'; // Add ellipsis
@@ -103,13 +133,13 @@ return
         .from('posts')
         .insert({
           title: formData.title,
-          content: formData.content,
-          topic_id: topicData.id,
+          content: content,
+          topic_id: topicId,
           cover_image_url: finalImageUrl,
           author_id: user.id,
           published: formData.published,
           slug: generateSlug(formData.title),
-          read_time: calculateReadTime(formData.content),
+          read_time: calculateReadTime(content),
           excerpt: excerpt
         })
         .select()
@@ -120,23 +150,40 @@ return
       // Handle tags
       if (formData.tags.length > 0) {
         const tagPromises = formData.tags.map(async (tagName) => {
-          const { data: tagData, error: tagError } = await supabase
+          // Check if tag exists
+          const { data: existingTag, error: tagCheckError } = await supabase
             .from('tags')
-            .upsert({
-              name: tagName,
-              slug: generateSlug(tagName)
-            })
-            .select()
+            .select('*')
+            .eq('name', tagName)
             .single();
 
-          if (tagError) throw tagError;
+          if (tagCheckError && tagCheckError.code !== 'PGRST116') {
+            throw tagCheckError;
+          }
+
+          let tagId;
+          if (existingTag) {
+            tagId = existingTag.id;
+          } else {
+            const { data: newTag, error: tagError } = await supabase
+              .from('tags')
+              .insert({
+                name: tagName,
+                slug: generateSlug(tagName)
+              })
+              .select()
+              .single();
+
+            if (tagError) throw tagError;
+            tagId = newTag.id;
+          }
 
           // Create post-tag relationship
           await supabase
             .from('post_tags')
             .insert({
               post_id: postData.id,
-              tag_id: tagData.id
+              tag_id: tagId
             });
         });
 
@@ -172,12 +219,6 @@ return
     }));
   };
 
-  const handleContentChange = (content) => {
-    setFormData(prev => ({
-      ...prev,
-      content
-    }));
-  };
 
   const handleTagInput = (e) => {
     const value = e.target.value;
@@ -405,8 +446,8 @@ return
             <div className="form-group">
               <label htmlFor="content" className="form-label">Content</label>
               <QuillEditor
-                value={formData.content}
-                onChange={handleContentChange}
+                editorId={editorId}
+                value=''
               />
             </div>
 
