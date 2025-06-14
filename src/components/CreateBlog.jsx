@@ -1,11 +1,10 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiUpload, FiX } from 'react-icons/fi';
-import ReactQuill from 'react-quill';
 import TopicManager from './TopicManager';
 import { supabase } from '../utils/supabase';
 import { useAuth } from '../lib/AuthContext';
-import 'react-quill/dist/quill.snow.css';
+import QuillEditor from './QuillEditor';
 import './CreateBlog.css';
 
 // Initial topics with icons
@@ -21,7 +20,6 @@ const initialTopics = [
 function CreateBlog() {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
-  const quillRef = useRef(null);
   const { user } = useAuth();
   const [formData, setFormData] = useState({
     title: '',
@@ -71,6 +69,9 @@ function CreateBlog() {
     e.preventDefault();
     setIsSubmitting(true);
 
+
+    console.log('formData', formData)
+return
     try {
       // First, upload the image if one is selected
       let finalImageUrl = '';
@@ -302,30 +303,6 @@ function CreateBlog() {
     }
   };
 
-  // ReactQuill modules configuration
-  const modules = {
-    toolbar: [
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-      ['blockquote', 'code-block'],
-      ['link', 'image'],
-      [{ 'align': [] }],
-      [{ 'color': [] }, { 'background': [] }],
-      [{ 'script': 'sub'}, { 'script': 'super' }],
-      ['clean'],
-      ['formula'], 
-    ],
-  };
-
-  // ReactQuill formats configuration
-  const formats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image', 'code-block'
-  ];
-
   return (
     <div className="main">
       <div className="container">
@@ -427,15 +404,9 @@ function CreateBlog() {
 
             <div className="form-group">
               <label htmlFor="content" className="form-label">Content</label>
-              <ReactQuill
-                ref={quillRef}
+              <QuillEditor
                 value={formData.content}
                 onChange={handleContentChange}
-                modules={modules}
-                formats={formats}
-                placeholder="Write here..."
-                className="quill-editor"
-                theme="snow"
               />
             </div>
 
