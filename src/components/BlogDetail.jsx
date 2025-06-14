@@ -25,6 +25,9 @@ function BlogDetail() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0);
+    
     const fetchBlog = async () => {
       if (!slug) {
         setError('No slug provided');

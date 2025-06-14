@@ -1,93 +1,127 @@
-import { IoTimeOutline } from 'react-icons/io5';
+import { IoTimeOutline, IoPersonCircle } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { supabase } from '../utils/supabase';
 
 function Blog() {
-  const blogPosts = [
-    {
-      id: 1,
-      image: '/images/blog-1.png',
-      title: 'Building microservices with Dropwizard, MongoDB & Docker',
-      topic: 'Database',
-      text: 'This NoSQL database oriented to documents (by documents like JSON) combines some of the features from relational databases, easy to use and the multi-platform is the best option for scale up and have fault tolerance, load balancing, map reduce, etc.',
-      date: '2022-01-17',
-      readTime: '3 min'
-    },
-    {
-      id: 2,
-      image: '/images/blog-2.png',
-      title: 'Building microservices with Dropwizard, MongoDB & Docker',
-      topic: 'Database',
-      text: 'This NoSQL database oriented to documents (by documents like JSON) combines some of the features from relational databases, easy to use and the multi-platform is the best option for scale up and have fault tolerance, load balancing, map reduce, etc.',
-      date: '2022-01-17',
-      readTime: '3 min'
-    },
-    {
-      id: 3,
-      image: '/images/blog-3.png',
-      title: 'Building microservices with Dropwizard, MongoDB & Docker',
-      topic: 'Database',
-      text: 'This NoSQL database oriented to documents (by documents like JSON) combines some of the features from relational databases, easy to use and the multi-platform is the best option for scale up and have fault tolerance, load balancing, map reduce, etc.',
-      date: '2022-01-17',
-      readTime: '3 min'
-    },
-    {
-      id: 4,
-      image: '/images/blog-4.png',
-      title: 'Building microservices with Dropwizard, MongoDB & Docker',
-      topic: 'Database',
-      text: 'This NoSQL database oriented to documents (by documents like JSON) combines some of the features from relational databases, easy to use and the multi-platform is the best option for scale up and have fault tolerance, load balancing, map reduce, etc.',
-      date: '2022-01-17',
-      readTime: '3 min'
-    },
-    {
-      id: 5,
-      image: '/images/blog-5.png',
-      title: 'Building microservices with Dropwizard, MongoDB & Docker',
-      topic: 'Database',
-      text: 'This NoSQL database oriented to documents (by documents like JSON) combines some of the features from relational databases, easy to use and the multi-platform is the best option for scale up and have fault tolerance, load balancing, map reduce, etc.',
-      date: '2022-01-17',
-      readTime: '3 min'
-    },
-    {
-      id: 6,
-      image: '/images/blog-6.png',
-      title: 'Building microservices with Dropwizard, MongoDB & Docker',
-      topic: 'Database',
-      text: 'This NoSQL database oriented to documents (by documents like JSON) combines some of the features from relational databases, easy to use and the multi-platform is the best option for scale up and have fault tolerance, load balancing, map reduce, etc.',
-      date: '2022-01-17',
-      readTime: '3 min'
-    },
-    // Add more blog posts here
-  ];
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchBlogPosts();
+  }, []);
+
+  const fetchBlogPosts = async () => {
+    try {
+      setLoading(true);
+      
+      // Fetch posts
+      const { data: posts, error: postsError } = await supabase
+        .from('posts')
+        .select('*')
+        .eq('published', true)
+        .order('created_at', { ascending: false });
+
+      if (postsError) throw postsError;
+
+      // Fetch authors
+      const authorIds = [...new Set(posts.map(post => post.author_id))];
+      const { data: authors, error: authorsError } = await supabase
+        .from('profiles')
+        .select('*')
+        .in('id', authorIds);
+
+      if (authorsError) throw authorsError;
+
+      // Fetch topics
+      const topicIds = [...new Set(posts.map(post => post.topic_id))];
+      const { data: topics, error: topicsError } = await supabase
+        .from('topics')
+        .select('*')
+        .in('id', topicIds);
+
+      if (topicsError) throw topicsError;
+
+      // Combine the data
+      const postsWithRelations = posts.map(post => ({
+        ...post,
+        profiles: authors.find(author => author.id === post.author_id),
+        topics: topics.find(topic => topic.id === post.topic_id)
+      }));
+
+      setBlogPosts(postsWithRelations);
+    } catch (err) {
+      setError(err.message);
+      console.error('Error fetching blog posts:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleImageError = (e) => {
+    e.target.src = '/images/pattern.png';
+  };
+
+  if (loading) {
+    return <div className="loading">Loading blog posts...</div>;
+  }
+
+  if (error) {
+    return <div className="error">Error: {error}</div>;
+  }
 
   return (
     <div className="blog">
-      <h2 className="h2">Latest Blog Post</h2>
+      <h2 className="h2">Latest Blog Posts</h2>
       <div className="blog-card-group">
         {blogPosts.map(post => (
           <div key={post.id} className="blog-card">
             <div className="blog-card-banner">
-              <img src={post.image} alt={post.title} className="blog-banner-img" />
+              <img 
+                src={post.cover_image_url || '/images/placeholder.png'} 
+                alt={post.title} 
+                className="blog-banner-img"
+                onError={handleImageError}
+              />
             </div>
 
             <div className="blog-content-wrapper">
-              <button className="blog-topic text-tiny">{post.topic}</button>
+              <button className="blog-topic text-tiny">
+                {post.topics?.name || 'Uncategorized'}
+              </button>
               <h3>
-                <Link to={`/blog/${post.id}`} className="h3">{post.title}</Link>
+                <Link to={`/blog/${post.slug}`} className="h3">{post.title}</Link>
               </h3>
-              <p className="blog-text">{post.text}</p>
+              <p className="blog-text">{post.excerpt || post.content.substring(0, 150) + '...'}</p>
 
               <div className="wrapper-flex">
                 <div className="profile-wrapper">
-                  <img src="/images/author.png" alt="Julia Walker" width="50" />
-                  <a href="#" className="h4 mob-author">Julia Walker</a>
+                  {post.profiles?.avatar_url ? (
+                    <img 
+                      src={post.profiles.avatar_url} 
+                      alt={post.profiles.full_name || 'Author'} 
+                      width="50"
+                      onError={handleImageError}
+                    />
+                  ) : (
+                    <IoPersonCircle 
+                      size={48} 
+                      className="default-avatar"
+                    />
+                  )}
+                  <a href={`/author/${post.profiles?.username}`} className="h4 mob-author">
+                    {post.profiles?.full_name || 'Author'}
+                  </a>
                 </div>
 
                 <div className="wrapper">
-                  <a href="#" className="h4 desk-author">Julia Walker</a>
+                  <a href={`/author/${post.profiles?.username}`} className="h4 desk-author">
+                    {post.profiles?.full_name || 'Author'}
+                  </a>
                   <p className="text-sm">
-                    <time dateTime={post.date}>
-                      {new Date(post.date).toLocaleDateString('en-US', {
+                    <time dateTime={post.created_at}>
+                      {new Date(post.created_at).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'short',
                         day: 'numeric'
@@ -95,7 +129,7 @@ function Blog() {
                     </time>
                     <span className="separator"></span>
                     <IoTimeOutline />
-                    <time dateTime={`PT${post.readTime.split(' ')[0]}M`}>{post.readTime}</time>
+                    <time dateTime={`PT${post.read_time || '3'}M`}>{post.read_time || '3'} min read</time>
                   </p>
                 </div>
               </div>
