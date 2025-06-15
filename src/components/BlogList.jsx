@@ -1,5 +1,5 @@
 import { IoTimeOutline, IoPersonCircle } from 'react-icons/io5';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
 import LoadingSpinner from './LoadingSpinner';
@@ -8,7 +8,7 @@ function Blog() {
   const [blogPosts, setBlogPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     fetchBlogPosts();
   }, []);
@@ -56,7 +56,6 @@ function Blog() {
   if (loading) {
     return <LoadingSpinner />;
   }
-
   if (error) {
     return <div className="error">Error: {error}</div>;
   }
@@ -71,7 +70,7 @@ function Blog() {
               <img 
                 onClick={() => navigate(`/blog/${post.slug}`)}
                 src={post.cover_image_url || '/images/placeholder.png'} 
-                alt={post.title} 
+                alt='' 
                 className="blog-banner-img"
                 onError={handleImageError}
               />

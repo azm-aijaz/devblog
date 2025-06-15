@@ -483,6 +483,7 @@ header .btn-group {
   width: 100%;
   display: block;
   object-fit: cover;
+  cursor: pointer;
 }
 
 .blog-content-wrapper {
