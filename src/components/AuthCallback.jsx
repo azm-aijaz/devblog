@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/utils/supabase';
+import LoadingSpinner from './LoadingSpinner';
 
 export default function AuthCallback() {
   const navigate = useNavigate();
@@ -18,8 +19,7 @@ export default function AuthCallback() {
           navigate('/', { replace: true });
         }
       } catch (error) {
-        console.error('Error handling auth callback:', error);
-        // Redirect to login page if there's an error
+        console.error('Error handling auth callback:', error);  
         navigate('/login', { replace: true });
       }
     };
@@ -27,6 +27,5 @@ export default function AuthCallback() {
     handleCallback();
   }, [navigate]);
 
-  // Return null to render nothing
-  return null;
+  return <LoadingSpinner />;
 }

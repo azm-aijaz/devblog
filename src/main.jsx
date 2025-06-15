@@ -4,9 +4,9 @@ import App from './App.jsx'
 import { AuthProvider } from './lib/AuthContext'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  <React.Fragment>
     <AuthProvider>
       <App />
     </AuthProvider>
-  </React.StrictMode>,
+  </React.Fragment>,
 )

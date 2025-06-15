@@ -145,9 +145,13 @@ function BlogDetail() {
 
             if (createError) {
               console.error('Error creating profile:', createError);
+              profile = { full_name: 'Anonymous Author', avatar_url: null };
             } else {
               profile = newProfile;
             }
+          } else {
+            // For any other error, set a default profile
+            profile = { full_name: 'Anonymous Author', avatar_url: null };
           }
         } else {
           profile = existingProfile;
@@ -156,7 +160,7 @@ function BlogDetail() {
         // Format the data
         const formattedBlog = {
           ...post,
-          author: profile?.full_name || 'Anonymous',
+          author: profile?.full_name || 'Anonymous Author',
           authorAvatar: profile?.avatar_url,
           topic: post.topics?.name,
           topicIcon: post.topics?.icon,
