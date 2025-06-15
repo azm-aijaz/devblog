@@ -85,11 +85,12 @@ function Blog() {
               <p className="blog-text">{post.excerpt}</p>
 
               <div className="wrapper-flex">
+                <div className="profile-wrapper-container">
                 <div className="profile-wrapper">
                   {post.author?.avatar_url ? (
                     <img 
                       src={post.author.avatar_url} 
-                      alt={post.author.full_name || 'Author'} 
+                      alt=''
                       width="50"
                       onError={handleImageError}
                     />
@@ -99,11 +100,12 @@ function Blog() {
                       className="default-avatar"
                     />
                   )}
-                  <a href={`/author/${post.author?.username}`} className="h4 mob-author">
+              
+                </div>
+                <a href={`/author/${post.author?.username}`} className="h4 mob-author">
                     {post.author?.full_name || 'Author'}
                   </a>
                 </div>
-
                 <div className="wrapper">
                   <a href={`/author/${post.author?.username}`} className="h4 desk-author">
                     {post.author?.full_name || 'Author'}

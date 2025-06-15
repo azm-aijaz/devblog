@@ -1,16 +1,13 @@
-.profile-wrapper {
-  width: 48px;
-  height: 48px;
+.blog-detail .profile-wrapper {
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   overflow: hidden;
-  position: relative;
+  border: 3px solid var(--action-primary);
   background: var(--background-secondary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.profile-wrapper img {
+.blog-detail .profile-wrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -20,10 +17,6 @@
   width: 100%;
   height: 100%;
   color: var(--foreground-tertiary);
-}
-/* Dark theme */
-.dark-theme .profile-wrapper {
-  background: var(--background-secondary);
 }
 
 .dark-theme .default-avatar {

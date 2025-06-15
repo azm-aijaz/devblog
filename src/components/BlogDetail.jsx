@@ -255,7 +255,7 @@ async function fetchPostBySlug(slug) {
                   {blog.authorAvatar ? (
                     <img 
                       src={blog.authorAvatar} 
-                      alt={blog.author}
+                      alt=''
                       onError={(e) => {
                         e.target.style.display = 'none';
                         e.target.nextSibling.style.display = 'block';

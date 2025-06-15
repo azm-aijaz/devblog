@@ -40,8 +40,13 @@
         height: 100%;
         object-fit: cover;
     }
-
-    .profile-wrapper img {
+    .profile-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        border-radius: 50%;
+      }
+    .profile-wrapper img, .profile-wrapper svg {
         border-radius: 100%;
         width: 56px;
         height: 56px;
@@ -125,7 +130,7 @@
     }
 
     .blog-text,
-    .profile-wrapper {
+    .profile-wrapper-container {
         display: block;
     }
 
@@ -147,15 +152,15 @@
         gap: 10px;
     }
 
-    .profile-wrapper {
+    .profile-wrapper-container {
         width: 56px;
         height: 56px;
         background: var(--action-primary);
-        padding: 3px;
+        /* padding: 3px; */
         border-radius: 50%;
     }
 
-    .profile-wrapper img {
+    .profile-wrapper img, .profile-wrapper svg {
         border-radius: 50%;
     }
 
