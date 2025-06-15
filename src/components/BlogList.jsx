@@ -68,6 +68,7 @@ function Blog() {
           <div key={post.id} className="blog-card">
             <div className="blog-card-banner">
               <img 
+                onClick={() => navigate(`/blog/${post.slug}`)}
                 src={post.cover_image_url || '/images/placeholder.png'} 
                 alt={post.title} 
                 className="blog-banner-img"
@@ -77,7 +78,7 @@ function Blog() {
 
             <div className="blog-content-wrapper">
               <button className="blog-topic text-tiny">
-                {post.topic?.name || 'Uncategorized'}
+                {post.topic?.name || 'General'}
               </button>
               <h3>
                 <Link to={`/blog/${post.slug}`} className="h3">{post.title}</Link>
