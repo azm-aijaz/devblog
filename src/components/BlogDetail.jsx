@@ -72,12 +72,12 @@ function BlogDetail() {
     return tempDiv.innerHTML;
   };
 
+  const [transformedContent, setTransformedContent] = useState('');
+
   useEffect(() => {
     if (blog?.content) {
-      // Update the content with transformed and highlighted code
-      if (contentRef.current) {
-        contentRef.current.innerHTML = transformQuillContent(blog.content);
-      }
+      const transformed = transformQuillContent(blog.content);
+      setTransformedContent(transformed);
     }
   }, [blog]);
 
@@ -328,8 +328,8 @@ function BlogDetail() {
           )}
 
           <div 
-            ref={contentRef}
             className="blog-detail-content"
+            dangerouslySetInnerHTML={{ __html: transformedContent }}
           />
         </article>
       </div>
