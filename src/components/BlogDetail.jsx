@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { 
   IoTimeOutline, 
@@ -13,6 +13,8 @@ import {
 import { supabase } from '../utils/supabase';
 import './BlogDetail.css';
 import LoadingSpinner from './LoadingSpinner';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/github-dark.css';
 
 function BlogDetail() {
   const { slug } = useParams();
@@ -23,6 +25,60 @@ function BlogDetail() {
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const contentRef = useRef(null);
+
+  const transformQuillContent = (content) => {
+    if (!content) return '';
+    
+    // Create a temporary div to parse the HTML
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = content;
+
+    // Find all Quill code block containers
+    const codeBlocks = tempDiv.querySelectorAll('.ql-code-block-container');
+    
+    codeBlocks.forEach(container => {
+      // Get all code lines
+      const codeLines = Array.from(container.querySelectorAll('.ql-code-block'))
+        .map(line => line.textContent)
+        .join('\n');
+
+      // Get the language from the first code block div
+      let language = container.querySelector('.ql-code-block')?.getAttribute('data-language');
+      let highlightedCode;
+      
+      // Create highlighted code
+      if (hljs.getLanguage(language)) {
+        // If language is supported, use it
+        highlightedCode = hljs.highlight(codeLines, { language }).value;
+      } else {
+        // Otherwise use auto-detection
+        const hljsAuto = hljs.highlightAuto(codeLines);
+        language = hljsAuto.language;
+        highlightedCode = hljsAuto.value;
+      }
+
+      // Create new pre element with highlighted code
+      const pre = document.createElement('pre');
+      const code = document.createElement('code');
+      pre.className = `language-${language}`;
+      code.innerHTML = highlightedCode;
+      pre.appendChild(code);
+
+      container.replaceWith(pre);
+    });
+
+    return tempDiv.innerHTML;
+  };
+
+  useEffect(() => {
+    if (blog?.content) {
+      // Update the content with transformed and highlighted code
+      if (contentRef.current) {
+        contentRef.current.innerHTML = transformQuillContent(blog.content);
+      }
+    }
+  }, [blog]);
 
   useEffect(() => {
     // Scroll to top when component mounts
@@ -61,8 +117,6 @@ function BlogDetail() {
           setLoading(false);
           return;
         }
-
-        console.log('Found post:', post);
 
         // Then fetch the author profile
         let profile = null;
@@ -264,8 +318,8 @@ function BlogDetail() {
           )}
 
           <div 
+            ref={contentRef}
             className="blog-detail-content"
-            dangerouslySetInnerHTML={{ __html: blog.content }}
           />
         </article>
       </div>

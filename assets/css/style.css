@@ -19,6 +19,7 @@
 
   --background-primary: hsl(0, 0%, 100%);
   --background-secondary: hsl(0, 0%, 97%);
+  --background-tertiary: hsl(0, 0%, 82%);
 
   --action-primary: hsl(214, 32%, 91%);
   --action-secondary: hsl(210, 38%, 95%);
@@ -39,6 +40,7 @@
 
   --background-primary: hsl(218, 23%, 23%);
   --background-secondary: hsl(220, 26%, 14%);
+  --background-tertiary:hsl(210, 24%, 84%);
 
   --action-primary: hsl(216, 15%, 52%);
   --action-secondary: hsl(218, 23%, 23%);

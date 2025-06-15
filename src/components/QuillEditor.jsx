@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
+import hljs from 'highlight.js';
 import './QuillEditor.css';
-
 
 function QuillEditor({ value='', editorId = 'quill-editor' }) {
   const quillRef = useRef(null);
@@ -43,6 +43,7 @@ function QuillEditor({ value='', editorId = 'quill-editor' }) {
       const options = {
         theme: 'snow',
         modules: {
+          syntax: { hljs },
           toolbar: toolbarOptions,
           table: false,
           'table-better': {
