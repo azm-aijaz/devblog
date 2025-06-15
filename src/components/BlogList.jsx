@@ -16,41 +16,30 @@ function Blog() {
     try {
       setLoading(true);
       
-      // Fetch posts
-      const { data: posts, error: postsError } = await supabase
+      // Fetch posts with authors and topics in a single query
+        const { data: posts, error: postsError } = await supabase
         .from('posts')
-        .select('*')
+        .select(`
+          *,
+          author:authors (
+            id,
+            username,
+            full_name,
+            avatar_url
+          ),
+          topic:topics (
+            id,
+            name,
+            icon
+          )
+        `)
         .eq('published', true)
         .order('created_at', { ascending: false });
+      
 
       if (postsError) throw postsError;
 
-      // Fetch authors
-      const authorIds = [...new Set(posts.map(post => post.author_id))];
-      const { data: authors, error: authorsError } = await supabase
-        .from('profiles')
-        .select('*')
-        .in('id', authorIds);
-
-      if (authorsError) throw authorsError;
-
-      // Fetch topics
-      const topicIds = [...new Set(posts.map(post => post.topic_id))];
-      const { data: topics, error: topicsError } = await supabase
-        .from('topics')
-        .select('*')
-        .in('id', topicIds);
-
-      if (topicsError) throw topicsError;
-
-      // Combine the data
-      const postsWithRelations = posts.map(post => ({
-        ...post,
-        profiles: authors.find(author => author.id === post.author_id),
-        topics: topics.find(topic => topic.id === post.topic_id)
-      }));
-
-      setBlogPosts(postsWithRelations);
+      setBlogPosts(posts);
     } catch (err) {
       setError(err.message);
       console.error('Error fetching blog posts:', err);
@@ -88,19 +77,19 @@ function Blog() {
 
             <div className="blog-content-wrapper">
               <button className="blog-topic text-tiny">
-                {post.topics?.name || 'Uncategorized'}
+                {post.topic?.name || 'Uncategorized'}
               </button>
               <h3>
                 <Link to={`/blog/${post.slug}`} className="h3">{post.title}</Link>
               </h3>
-              <p className="blog-text">{post.excerpt || post.content.substring(0, 150) + '...'}</p>
+              <p className="blog-text">{post.excerpt}</p>
 
               <div className="wrapper-flex">
                 <div className="profile-wrapper">
-                  {post.profiles?.avatar_url ? (
+                  {post.author?.avatar_url ? (
                     <img 
-                      src={post.profiles.avatar_url} 
-                      alt={post.profiles.full_name || 'Author'} 
+                      src={post.author.avatar_url} 
+                      alt={post.author.full_name || 'Author'} 
                       width="50"
                       onError={handleImageError}
                     />
@@ -110,14 +99,14 @@ function Blog() {
                       className="default-avatar"
                     />
                   )}
-                  <a href={`/author/${post.profiles?.username}`} className="h4 mob-author">
-                    {post.profiles?.full_name || 'Author'}
+                  <a href={`/author/${post.author?.username}`} className="h4 mob-author">
+                    {post.author?.full_name || 'Author'}
                   </a>
                 </div>
 
                 <div className="wrapper">
-                  <a href={`/author/${post.profiles?.username}`} className="h4 desk-author">
-                    {post.profiles?.full_name || 'Author'}
+                  <a href={`/author/${post.author?.username}`} className="h4 desk-author">
+                    {post.author?.full_name || 'Author'}
                   </a>
                   <p className="text-sm">
                     <time dateTime={post.created_at}>

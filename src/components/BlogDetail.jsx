@@ -73,6 +73,24 @@ function BlogDetail() {
   };
 
   const [transformedContent, setTransformedContent] = useState('');
+  const { VITE_SUPABASE_ANON_KEY } = import.meta.env;
+
+async function fetchPostBySlug(slug) {
+  const res = await fetch(`/api/posts?select=id,title,content,slug,read_time,view_count,like_count,created_at,author:authors(full_name,avatar_url),topic:topics(name,icon)&slug=eq.${slug}`, {
+    headers: {
+      apikey: VITE_SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${VITE_SUPABASE_ANON_KEY}`,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch post: ${res.statusText}`);
+  }
+
+  const data = await res.json();
+  return data[0]; // because Supabase returns an array
+}
+
 
   useEffect(() => {
     if (blog?.content) {
@@ -85,22 +103,28 @@ function BlogDetail() {
     // Scroll to top when component mounts
     window.scrollTo(0, 0);
     
-    const fetchBlog = async () => {
-      if (!slug) {
-        setError('No slug provided');
-        setLoading(false);
-        return;
-      }
-
+    const fetchBlogPost = async () => {
       try {
         setLoading(true);
-        
-        // First, fetch the blog post
+        setError(null);
+
+        // Fetch post with author and topic in a single query
         const { data: post, error: postError } = await supabase
           .from('posts')
           .select(`
-            *,
-            topics (
+            id,
+            title,
+            content,
+            slug,
+            read_time,
+            view_count,
+            like_count,
+            created_at,
+            author:authors (
+              full_name,
+              avatar_url
+            ),
+            topic:topics (
               name,
               icon
             )
@@ -109,61 +133,23 @@ function BlogDetail() {
           .single();
 
         if (postError) {
-          console.error('Post fetch error:', postError);
           throw postError;
         }
 
         if (!post) {
           setError('Blog post not found');
           setLoading(false);
-          navigate('/404', { replace: true });
+          // navigate('/404', { replace: true });
           return;
-        }
-
-        // Then fetch the author profile
-        let profile = null;
-        const { data: existingProfile, error: profileError } = await supabase
-          .from('profiles')
-          .select('full_name, avatar_url')
-          .eq('id', post.author_id)
-          .single();
-
-        if (profileError) {
-          console.error('Profile fetch error:', profileError);
-          
-          // If profile doesn't exist, create a default one
-          if (profileError.code === 'PGRST116') {
-            const { data: newProfile, error: createError } = await supabase
-              .from('profiles')
-              .insert({
-                id: post.author_id,
-                full_name: 'Anonymous Author',
-                avatar_url: null
-              })
-              .select()
-              .single();
-
-            if (createError) {
-              console.error('Error creating profile:', createError);
-              profile = { full_name: 'Anonymous Author', avatar_url: null };
-            } else {
-              profile = newProfile;
-            }
-          } else {
-            // For any other error, set a default profile
-            profile = { full_name: 'Anonymous Author', avatar_url: null };
-          }
-        } else {
-          profile = existingProfile;
         }
 
         // Format the data
         const formattedBlog = {
           ...post,
-          author: profile?.full_name || 'Anonymous Author',
-          authorAvatar: profile?.avatar_url,
-          topic: post.topics?.name,
-          topicIcon: post.topics?.icon,
+          author: post.author?.full_name || 'Anonymous Author',
+          authorAvatar: post.author?.avatar_url,
+          topic: post.topic?.name,
+          topicIcon: post.topic?.icon,
           date: new Date(post.created_at).toISOString(),
           readTime: `${post.read_time} min`
         };
@@ -189,19 +175,15 @@ function BlogDetail() {
           setViews(prev => prev + 1);
         }
 
+        setLoading(false);
       } catch (err) {
-        console.error('Error fetching blog:', err);
+        console.error('Error fetching blog post:', err);
         setError(err.message);
-        navigate('/error', { 
-          replace: true,
-          state: { error: err.message }
-        });
-      } finally {
         setLoading(false);
       }
     };
 
-    fetchBlog();
+    fetchBlogPost();
   }, [slug, navigate]);
 
   const handleLike = async () => {
