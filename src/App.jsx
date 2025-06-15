@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import Login from './components/Login';
 import AuthCallback from './components/AuthCallback';
 import LoadingSpinner from './components/LoadingSpinner';
+import BlogListByTopic from './components/BlogListByTopic';
 import './App.css';
 
 // Protected Route component
@@ -50,6 +51,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/blog/:slug" element={<BlogDetail />} />
+            <Route path="/topic/:slug" element={<BlogListByTopic />} />
             <Route path="/login" element={<Login />} />
             <Route path="/auth/callback" element={<AuthCallback />} />
             <Route 

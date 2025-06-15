@@ -31,7 +31,7 @@ function Blog() {
           topic:topics (
             id,
             name,
-            icon
+            slug
           )
         `)
         .eq('published', true)
@@ -77,7 +77,9 @@ function Blog() {
             </div>
 
             <div className="blog-content-wrapper">
-              <button className="blog-topic text-tiny">
+              <button 
+                onClick={() => navigate(`/topic/${post.topic?.slug}`)}
+                className="blog-topic text-tiny">
                 {post.topic?.name || 'General'}
               </button>
               <h3>
