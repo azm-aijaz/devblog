@@ -2,6 +2,7 @@ import { IoTimeOutline, IoPersonCircle } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
+import LoadingSpinner from './LoadingSpinner';
 
 function Blog() {
   const [blogPosts, setBlogPosts] = useState([]);
@@ -53,7 +54,7 @@ function Blog() {
   };
 
   if (loading) {
-    return <div className="loading">Loading blog posts...</div>;
+    return <LoadingSpinner />;
   }
 
   if (error) {
