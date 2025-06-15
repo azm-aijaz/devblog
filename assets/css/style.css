@@ -27,7 +27,7 @@
   --foreground-primary: hsl(218, 23%, 23%);
   --foreground-secondary: hsl(216, 15%, 52%);
   --foreground-tertiary: hsl(214, 20%, 69%);
-
+  --content-primary: hsl(216, 15%, 33%);
   --accent: hsl(229, 76%, 66%);
 
 }
@@ -48,7 +48,7 @@
   --foreground-primary: hsl(210, 38%, 95%);
   --foreground-secondary: hsl(211, 25%, 84%);
   --foreground-tertiary: hsl(214, 20%, 69%);
-
+  --content-primary: hsl(211, 25%, 84%);
   --accent: hsl(229, 76%, 66%);
 
 }
@@ -483,7 +483,6 @@ header .btn-group {
   width: 100%;
   display: block;
   object-fit: cover;
-  cursor: pointer;
 }
 
 .blog-content-wrapper {

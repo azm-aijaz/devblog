@@ -100,7 +100,7 @@
 }
 
 .blog-detail-content {
-  color: var(--foreground-secondary);
+  color: var(--content-primary);
   font-size: 1.1rem;
   line-height: 1.8;
 }
