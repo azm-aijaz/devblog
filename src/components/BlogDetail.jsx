@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { 
   IoTimeOutline, 
   IoEyeOutline, 
@@ -18,6 +18,7 @@ import 'highlight.js/styles/github-dark.css';
 
 function BlogDetail() {
   const { slug } = useParams();
+  const navigate = useNavigate();
   const [likes, setLikes] = useState(0);
   const [views, setViews] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
@@ -115,6 +116,7 @@ function BlogDetail() {
         if (!post) {
           setError('Blog post not found');
           setLoading(false);
+          navigate('/404', { replace: true });
           return;
         }
 
@@ -186,13 +188,17 @@ function BlogDetail() {
       } catch (err) {
         console.error('Error fetching blog:', err);
         setError(err.message);
+        navigate('/error', { 
+          replace: true,
+          state: { error: err.message }
+        });
       } finally {
         setLoading(false);
       }
     };
 
     fetchBlog();
-  }, [slug]);
+  }, [slug, navigate]);
 
   const handleLike = async () => {
     if (!blog) return;
